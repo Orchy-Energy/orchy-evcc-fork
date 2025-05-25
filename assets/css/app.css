@@ -22,18 +22,18 @@
 @custom-media --dark-mode (prefers-color-scheme: dark);
 
 :root {
-	--evcc-green: #baffcb;
-	--evcc-dark-green: #0fde41ff;
-	--evcc-darker-green: #0ba631ff;
-	--evcc-darker-green-rgb: 11, 166, 49;
-	--evcc-darkest-green: #076f20ff;
-	--evcc-darkest-green-rgb: 7, 111, 32;
+	--evcc-green: #ffcb99;
+	--evcc-dark-green: #ff9f41;
+	--evcc-darker-green: #ff7f00;
+	--evcc-darker-green-rgb: 255, 127, 0;
+	--evcc-darkest-green: #ec5c39;
+	--evcc-darkest-green-rgb: 236, 92, 57;
 	--evcc-yellow: #faf000;
 	--evcc-dark-yellow: #bbb400;
 	--evcc-orange: #ff9000;
 	--evcc-orange-rgb: 255, 144, 0;
-	--evcc-red: #fc440f;
-	--evcc-red-rgb: 252, 68, 15;
+	--evcc-red: #ff0000;
+	--evcc-red-rgb: 255, 0, 0;
 	--bs-gray-deep: #010322;
 	--bs-gray-dark: #28293e;
 	--bs-gray-darker: #151630;
