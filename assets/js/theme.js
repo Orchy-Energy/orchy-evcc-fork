@@ -24,7 +24,7 @@ export function setThemePreference(theme) {
 }
 
 function setMetaThemeColor(theme) {
-  const themeColors = { light: "#f3f3f7", dark: "#020318" };
+  const themeColors = { light: "#fff4eb", dark: "#2c1500" };
   const $metaThemeColor = document.querySelector("meta[name=theme-color]");
   if ($metaThemeColor) {
     $metaThemeColor.setAttribute("content", themeColors[theme]);

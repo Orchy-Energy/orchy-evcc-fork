@@ -61,7 +61,6 @@
 				:selectedIndex="selectedLoadpointIndex"
 				@index-changed="selectedLoadpointChanged"
 			/>
-			<Footer v-bind="footer"></Footer>
 		</div>
 	</div>
 </template>
@@ -72,7 +71,6 @@ import Navigation from "../Top/Navigation.vue";
 import Notifications from "../Top/Notifications.vue";
 import Energyflow from "../Energyflow/Energyflow.vue";
 import Loadpoints from "../Loadpoints/Loadpoints.vue";
-import Footer from "../Footer/Footer.vue";
 import formatter from "@/mixins/formatter";
 import collector from "@/mixins/collector";
 import WelcomeIcons from "./WelcomeIcons.vue";
@@ -82,7 +80,6 @@ export default {
 	components: {
 		Loadpoints,
 		Energyflow,
-		Footer,
 		Notifications,
 		TopNavigation: Navigation,
 		WelcomeIcons,

@@ -1,0 +1,10 @@
+:root {
+	--evcc-green: #ffcb99;
+	--evcc-dark-green: #ff9f41;
+	--evcc-darker-green: #ff7f00;
+	--evcc-darker-green-rgb: 255, 127, 0;
+	--evcc-darkest-green: #ec5c39;
+	--evcc-darkest-green-rgb: 236, 92, 57;
+	--evcc-red: #ff0000;
+	--evcc-red-rgb: 255, 0, 0;
+}
