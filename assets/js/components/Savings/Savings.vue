@@ -192,7 +192,6 @@
 								<LiveCommunity />
 								<TelemetrySettings :sponsorActive="!!sponsor?.name" />
 							</div>
-							<Sponsor v-bind="sponsor" />
 						</div>
 					</div>
 				</div>
@@ -204,7 +203,6 @@
 <script lang="ts">
 import Modal from "bootstrap/js/dist/modal";
 import formatter from "@/mixins/formatter";
-import Sponsor from "./Sponsor.vue";
 import Tile from "./Tile.vue";
 import LiveCommunity from "./LiveCommunity.vue";
 import TelemetrySettings from "../TelemetrySettings.vue";
@@ -219,7 +217,7 @@ import co2Reference from "./co2Reference.ts";
 
 export default defineComponent({
 	name: "Savings",
-	components: { Sponsor, SavingsTile: Tile, LiveCommunity, TelemetrySettings, CustomSelect },
+	components: { SavingsTile: Tile, LiveCommunity, TelemetrySettings, CustomSelect },
 	mixins: [formatter],
 	props: {
 		statistics: { type: Object, default: () => ({}) },
