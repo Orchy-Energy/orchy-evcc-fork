@@ -48,3 +48,4 @@ asset-stats.html
 *storybook.log
 !custom/**/*.yaml
 !compose.yaml
+data/
