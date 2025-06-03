@@ -205,6 +205,9 @@ func runRoot(cmd *cobra.Command, args []string) {
 		}
 
 		if err == nil && influx != nil {
+			// Set the InfluxDB client on the site
+			site.SetInflux(influx)
+
 			// eliminate duplicate values
 			dedupe := pipe.NewDeduplicator(30*time.Minute,
 				keys.VehicleSoc,

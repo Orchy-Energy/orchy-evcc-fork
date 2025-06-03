@@ -13,6 +13,7 @@ import (
 	"github.com/benbjohnson/clock"
 	"github.com/cenkalti/backoff/v4"
 	"github.com/evcc-io/evcc/api"
+	"github.com/evcc-io/evcc/api/influx"
 	"github.com/evcc-io/evcc/cmd/shutdown"
 	"github.com/evcc-io/evcc/core/circuit"
 	"github.com/evcc-io/evcc/core/coordinator"
@@ -114,6 +115,9 @@ type Site struct {
 	batteryMode              api.BatteryMode // Battery mode (runtime only, not persisted)
 	batteryModeExternal      api.BatteryMode // Battery mode (external, runtime only, not persisted)
 	batteryModeExternalTimer time.Time       // Battery mode timer for external control
+
+	// influxdb client
+	influx influx.API
 }
 
 // MetersConfig contains the site's meter configuration
@@ -1061,4 +1065,14 @@ func (site *Site) Run(stopC chan struct{}, interval time.Duration) {
 			return
 		}
 	}
+}
+
+// GetInflux returns the InfluxDB client
+func (site *Site) GetInflux() influx.API {
+	return site.influx
+}
+
+// SetInflux sets the InfluxDB client
+func (site *Site) SetInflux(client influx.API) {
+	site.influx = client
 }
