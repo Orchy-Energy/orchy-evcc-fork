@@ -1,4 +1,5 @@
 import "bootstrap/dist/css/bootstrap.min.css";
+import 'bootstrap-icons/font/bootstrap-icons.css';
 import "../css/app.css";
 import { createApp, h } from "vue";
 import { VueHeadMixin, createHead } from "@unhead/vue/client";

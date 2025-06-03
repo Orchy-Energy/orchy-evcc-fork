@@ -31,7 +31,7 @@ CURRDIR := $(shell pwd)
 
 default:: ui build
 
-all:: clean install install-ui ui assets lint test-ui lint-ui test build
+all:: clean install install-ui ui assets lint-ui lint test-ui test build
 
 clean::
 	rm -rf dist/
@@ -82,6 +82,33 @@ release::
 docker::
 	@echo Version: $(VERSION) $(SHA) $(BUILD_DATE)
 	docker buildx build --platform $(PLATFORM) --tag $(DOCKER_IMAGE):$(DOCKER_TAG) --push .
+
+docker-create-network:
+	docker network create -d bridge local-network
+
+docker-build::
+	docker buildx build . -t orchy/evcc
+
+docker-run::
+	docker run -d --name orchy_evcc \
+		--network=local-network \
+		-v /Users/matiascecchetto/dev/Orchy/orchy-evcc-fork/custom/config/evcc.yaml:/etc/evcc.yaml \
+		-v /Users/matiascecchetto/.evcc:/root/.evcc -p 7070:7070 -p 8887:8887 \
+		orchy/evcc
+
+docker-run-influx:
+	docker run -d -p 8086:8086 --name orchy_influx \
+		-v "/Users/matiascecchetto/dev/Orchy/orchy-evcc-fork/data:/var/lib/influxdb2" \
+		-v "/Users/matiascecchetto/dev/Orchy/orchy-evcc-fork/config:/etc/influxdb2" \
+		--network=local-network \
+		-e DOCKER_INFLUXDB_INIT_MODE=setup \
+		-e DOCKER_INFLUXDB_INIT_USERNAME=my-user \
+		-e DOCKER_INFLUXDB_INIT_PASSWORD=my-password \
+		-e DOCKER_INFLUXDB_INIT_ORG=my-org \
+		-e DOCKER_INFLUXDB_INIT_BUCKET=my-bucket \
+		-e DOCKER_INFLUXDB_INIT_RETENTION=1w \
+		-e DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=my-super-secret-auth-token \
+		influxdb:2
 
 publish-nightly::
 	@echo Version: $(VERSION) $(SHA) $(BUILD_DATE)
