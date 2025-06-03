@@ -47,3 +47,5 @@ asset-stats.html
 /tsconfig.tsbuildinfo
 *storybook.log
 !custom/**/*.yaml
+!compose.yaml
+data/

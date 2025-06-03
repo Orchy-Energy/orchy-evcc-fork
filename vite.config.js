@@ -3,6 +3,7 @@ import vuePlugin from "@vitejs/plugin-vue";
 import legacy from "@vitejs/plugin-legacy";
 import { visualizer } from "rollup-plugin-visualizer";
 import path from "path";
+import svgLoader from 'vite-svg-loader'
 
 export default defineConfig({
   root: "./assets",
@@ -40,5 +41,6 @@ export default defineConfig({
       },
     }),
     visualizer({ filename: "asset-stats.html" }),
+    svgLoader(),
   ],
 });

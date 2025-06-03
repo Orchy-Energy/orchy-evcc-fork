@@ -27,7 +27,7 @@ export default {
 			return { title };
 		}
 		// no custom title
-		return { title: "evcc", titleTemplate: null };
+		return { title: "Orchy Energy", titleTemplate: null };
 	},
 };
 </script>
