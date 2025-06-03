@@ -87,9 +87,11 @@ docker-create-network:
 	docker network create -d bridge local-network
 
 docker-build::
+	@echo Version: $(VERSION) $(SHA) $(BUILD_DATE)
 	docker buildx build . -t orchy/evcc
 
 docker-run::
+	docker rm -f orchy_evcc || true
 	docker run -d --name orchy_evcc \
 		--network=local-network \
 		-v /Users/matiascecchetto/dev/Orchy/orchy-evcc-fork/custom/config/evcc.yaml:/etc/evcc.yaml \
