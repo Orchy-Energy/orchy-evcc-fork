@@ -1,6 +1,7 @@
 package server
 
 import (
+	"context"
 	"crypto/tls"
 	"fmt"
 	"reflect"
@@ -10,6 +11,7 @@ import (
 	"time"
 
 	"github.com/benbjohnson/clock"
+	"github.com/evcc-io/evcc/api/influx"
 	"github.com/evcc-io/evcc/core/site"
 	"github.com/evcc-io/evcc/util"
 	influxdb2 "github.com/influxdata/influxdb-client-go/v2"
@@ -53,6 +55,50 @@ func NewInfluxClient(url, token, org, user, password, database string, insecure 
 		org:      org,
 		database: database,
 	}
+}
+
+// ExecuteQuery executes a Flux query and returns the results
+func (m *Influx) ExecuteQuery(ctx context.Context, query string) (*influx.QueryResult, error) {
+	reader := m.client.QueryAPI(m.org)
+	
+	result := &influx.QueryResult{
+		Records: make([]map[string]interface{}, 0),
+	}
+
+	results, err := reader.Query(ctx, query)
+	if err != nil {
+		return result, fmt.Errorf("query execution error: %v", err)
+	}
+	defer results.Close()
+
+	// Process the results
+	for results.Next() {
+		record := results.Record()
+		row := make(map[string]interface{})
+		
+		// Add measurement name
+		row["_measurement"] = record.Measurement()
+		
+		// Add field and value
+		row["_field"] = record.Field()
+		row["_value"] = record.Value()
+		
+		// Add time
+		row["_time"] = record.Time()
+		
+		// Add all tags
+		for k, v := range record.Values() {
+			row[k] = v
+		}
+
+		result.Records = append(result.Records, row)
+	}
+
+	if err := results.Err(); err != nil {
+		return result, fmt.Errorf("error processing results: %v", err)
+	}
+
+	return result, nil
 }
 
 // pointWriter is the minimal interface for influxdb2 api.Writer

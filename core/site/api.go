@@ -2,6 +2,7 @@ package site
 
 import (
 	"github.com/evcc-io/evcc/api"
+	"github.com/evcc-io/evcc/api/influx"
 	"github.com/evcc-io/evcc/core/loadpoint"
 )
 
@@ -76,4 +77,7 @@ type API interface {
 	GetBatteryModeExternal() api.BatteryMode
 	// SetBatteryModeExternal sets the external battery mode
 	SetBatteryModeExternal(api.BatteryMode)
+
+	// GetInflux returns the InfluxDB client
+	GetInflux() influx.API
 }

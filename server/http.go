@@ -1,6 +1,7 @@
 package server
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"os"
@@ -8,6 +9,7 @@ import (
 
 	eapi "github.com/evcc-io/evcc/api"
 	"github.com/evcc-io/evcc/api/globalconfig"
+	"github.com/evcc-io/evcc/api/influx"
 	"github.com/evcc-io/evcc/core"
 	"github.com/evcc-io/evcc/core/keys"
 	"github.com/evcc-io/evcc/core/site"
@@ -114,6 +116,35 @@ func (s *HTTPd) Router() *mux.Router {
 	return s.Handler.(*mux.Router)
 }
 
+// QueryRequest represents an InfluxDB query request
+type QueryRequest struct {
+	Query string `json:"query"`
+}
+
+// influxQueryHandler handles InfluxDB query requests
+func influxQueryHandler(client influx.API) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			w.WriteHeader(http.StatusMethodNotAllowed)
+			return
+		}
+
+		var req influx.QueryRequest
+		if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+			http.Error(w, fmt.Sprintf("invalid request: %v", err), http.StatusBadRequest)
+			return
+		}
+
+		result, err := client.ExecuteQuery(r.Context(), req.Query)
+		if err != nil {
+			result = &influx.QueryResult{Error: err.Error()}
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(result)
+	}
+}
+
 // RegisterSiteHandlers connects the http handlers to the site
 func (s *HTTPd) RegisterSiteHandlers(site site.API, valueChan chan<- util.Param) {
 	router := s.Server.Handler.(*mux.Router)
@@ -146,6 +177,7 @@ func (s *HTTPd) RegisterSiteHandlers(site site.API, valueChan chan<- util.Param)
 		"deletesession":           {"DELETE", "/session/{id:[0-9]+}", deleteSessionHandler},
 		"telemetry":               {"GET", "/settings/telemetry", getHandler(telemetry.Enabled)},
 		"telemetry2":              {"POST", "/settings/telemetry/{value:[01truefalse]+}", boolHandler(telemetry.Enable, telemetry.Enabled)},
+		"influxquery":             {"POST", "/influx/query", influxQueryHandler(site.GetInflux())},
 	}
 
 	for _, r := range routes {
