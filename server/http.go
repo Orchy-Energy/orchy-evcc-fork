@@ -135,7 +135,7 @@ func influxQueryHandler(client influx.API) http.HandlerFunc {
 			return
 		}
 
-		result, err := client.ExecuteQuery(req.Query)
+		result, err := client.ExecuteQuery(r.Context(), req.Query)
 		if err != nil {
 			result = &influx.QueryResult{Error: err.Error()}
 		}

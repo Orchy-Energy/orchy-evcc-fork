@@ -19,12 +19,6 @@ import (
 	influxlog "github.com/influxdata/influxdb-client-go/v2/log"
 )
 
-// QueryResult represents the result of an InfluxDB query
-type QueryResult struct {
-	Records []map[string]interface{} `json:"records"`
-	Error   string                   `json:"error,omitempty"`
-}
-
 // Influx is a influx publisher
 type Influx struct {
 	sync.Mutex
@@ -64,14 +58,14 @@ func NewInfluxClient(url, token, org, user, password, database string, insecure 
 }
 
 // ExecuteQuery executes a Flux query and returns the results
-func (m *Influx) ExecuteQuery(query string) (*influx.QueryResult, error) {
+func (m *Influx) ExecuteQuery(ctx context.Context, query string) (*influx.QueryResult, error) {
 	reader := m.client.QueryAPI(m.org)
 	
 	result := &influx.QueryResult{
 		Records: make([]map[string]interface{}, 0),
 	}
 
-	results, err := reader.Query(context.Background(), query)
+	results, err := reader.Query(ctx, query)
 	if err != nil {
 		return result, fmt.Errorf("query execution error: %v", err)
 	}

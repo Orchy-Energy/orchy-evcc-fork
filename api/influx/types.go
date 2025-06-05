@@ -1,5 +1,7 @@
 package influx
 
+import "context"
+
 // QueryRequest represents an InfluxDB query request
 type QueryRequest struct {
 	Query string `json:"query"`
@@ -13,5 +15,5 @@ type QueryResult struct {
 
 // API defines the interface for InfluxDB operations
 type API interface {
-	ExecuteQuery(query string) (*QueryResult, error)
+	ExecuteQuery(ctx context.Context, query string) (*QueryResult, error)
 } 
